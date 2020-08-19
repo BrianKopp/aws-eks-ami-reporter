@@ -1,11 +1,9 @@
 #!/bin/bash -e
 
-printenv
-
 buildid=$GITHUB_RUN_ID
-artifactbucket=${{ secrets.BUCKET_NAME }}
+artifactbucket=$BUCKET_NAME
 branch=${GITHUB_REF##8/} # GITHUB_REF formatted like refs/head/branch-name.
-accountid=${{ secrets.ACCOUNT_ID }}
+accountid=$ACCOUNT_ID
 capacity=3
 regions="us-east-1\nus-east-2"
 regionarray=()
