@@ -1,0 +1,187 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "core resources like lambda and dynamodb",
+  "Metadata": {},
+  "Parameters": {
+    "resourceNamePrefix": {
+      "Description": "the name to prefix resources, like dev-aws-eks-ami",
+      "Type": "String"
+    },
+    "dynamoReadCapacity": {
+      "Description": "the amount of RCUs to use",
+      "Type": "Number"
+    },
+    "dynamoWriteCapacity": {
+      "Description": "the amount of WCUs to use",
+      "Type": "Number"
+    },
+    "lambdaCodeBucket": {
+      "Description": "bucket where lambda code is",
+      "Type": "String"
+    },
+    "lambdaCodeKey": {
+      "Description": "key where lambda zip file is",
+      "Type": "String"
+    },
+    "lambdaRole": {
+      "Description": "lambda function role arn",
+      "Type": "String"
+    },
+    "eventRulePattern": {
+      "Description": "Pattern to allow invoking lambda function",
+      "Type": "String"
+    },
+    "accountId": {
+      "Description": "account id",
+      "Type": "String"
+    },
+    "environment": {
+      "Description": "name of environment for tagging",
+      "Type": "String"
+    },
+    "alwaysreport": {
+      "Description": "whether the lambda function always publishes SNS topics, regardless of change",
+      "Type": "String"
+    }
+  },
+  "Mappings": {},
+  "Conditions": {},
+  "Resources": {
+    "dynamo": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": {
+          "Ref": "resourceNamePrefix"
+        },
+        "KeySchema": [
+          {
+            "AttributeName": "name",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "region",
+            "KeyType": "RANGE"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "name",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "region",
+            "AttributeType": "S"
+          }
+        ],
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "region-index",
+            "KeySchema": [
+              {
+                "AttributeName": "region",
+                "KeyType": "HASH"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "INCLUDE",
+              "NonKeyAttributes": [
+                "id",
+                "version",
+                "type"
+              ]
+            },
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": {
+                "Ref": "dynamoReadCapacity"
+              },
+              "WriteCapacityUnits": {
+                "Ref": "dynamoWriteCapacity"
+              }
+            }
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": {
+            "Ref": "dynamoReadCapacity"
+          },
+          "WriteCapacityUnits": {
+            "Ref": "dynamoWriteCapacity"
+          }
+        },
+        "Tags": [{
+          "Key": "environment",
+          "Value": "environment"
+        }]
+      }
+    },
+    "lambda": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {
+          "Fn::Join": [
+            "-",
+            [
+              {
+                "Ref": "resourceNamePrefix"
+              },
+              "checker"
+            ]
+          ]
+        },
+        "Description": "checks for new EKS AMIs",
+        "Handler": "index.handler",
+        "Code": {
+          "S3Bucket": { "Ref": "lambdaCodeBucket" },
+          "S3Key": { "Ref": "lambdaCodeKey" }
+        },
+        "Role": {
+          "Ref": "lambdaRole"
+        },
+        "Runtime": "nodejs12.x",
+        "MemorySize": 256,
+        "Timeout": 60,
+        "KmsKeyArn": "",
+        "Environment": {
+          "Variables": {
+            "ACCOUNT_ID": {
+              "Ref": "accountId"
+            },
+            "TABLE_NAME": {
+              "Ref": "resourceNamePrefix"
+            },
+            "TOPIC_NAME": {
+              "Ref": "resourceNamePrefix"
+            },
+            "ALWAYS_REPORT": {
+              "Ref": "alwaysreport"
+            }
+          }
+        },
+        "Tags": [
+          {
+            "Key": "environment",
+            "Value": {
+              "Ref": "environment"
+            }
+          }
+        ]
+      }
+    },
+    "lambdaPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Ref": "lambda"
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Ref": "eventRulePattern"
+        }
+      }
+    }
+  },
+  "Outputs": {
+
+  }
+}

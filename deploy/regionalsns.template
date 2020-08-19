@@ -1,0 +1,104 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Creates a regional SNS topic",
+  "Metadata": {},
+  "Parameters": {
+    "topicName": {
+      "Description": "sns topic name",
+      "Type": "String"
+    },
+    "accountId": {
+      "Description": "account ID",
+      "Type": "String"
+    },
+    "environment": {
+      "Description": "which branch",
+      "Type": "String"
+    }
+  },
+  "Mappings": {},
+  "Conditions": {},
+  "Resources": {
+    "snsTopic": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "publishes messages for AWS EKS AMI",
+        "TopicName": {
+          "Ref": "topicName"
+        },
+        "Tags": [
+          {
+            "Key": "environment",
+            "Value": {
+              "Ref": "environment"
+            }
+          }
+        ]
+      }
+    },
+    "snsTopicPolicy": {
+      "Type": "AWS::SNS::TopicPolicy",
+      "Properties": {
+        "PolicyDocument": {
+          "Version": "2008-10-17",
+          "Id": "__default_policy_ID",
+          "Statement": [
+            {
+              "Sid": "__default_statement_ID",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": [
+                "SNS:Publish",
+                "SNS:RemovePermission",
+                "SNS:SetTopicAttributes",
+                "SNS:DeleteTopic",
+                "SNS:ListSubscriptionsByTopic",
+                "SNS:GetTopicAttributes",
+                "SNS:Receive",
+                "SNS:AddPermission",
+                "SNS:Subscribe"
+              ],
+              "Resource": {
+                "Ref": "snsTopic"
+              },
+              "Condition": {
+                "StringEquals": {
+                  "AWS:SourceOwner": {
+                    "Ref": "accountId"
+                  }
+                }
+              }
+            },
+            {
+              "Sid": "public",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": "sns:Subscribe",
+              "Resource": {
+                "Ref": "snsTopic"
+              },
+              "Condition": {
+                "StringEquals": {
+                  "sns:Protocol": [
+                    "sqs",
+                    "lambda"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "Topics": [
+          {
+            "Ref": "snsTopic"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {}
+}

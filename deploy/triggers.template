@@ -1,0 +1,46 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Creates region-specific triggers",
+  "Metadata": {},
+  "Parameters": {
+      "eventName": {
+          "Description": "what to call the rule",
+          "Type": "String"
+      },
+      "lambdaTargetArn": {
+        "Description": "the lambda arn to target",
+        "Type": "String"
+      },
+      "lambdaName": {
+        "Description": "the lambda name",
+        "Type": "String"
+      },
+      "targetRegion": {
+        "Description": "region to check",
+        "Type": "String"
+      },
+      "schedule": {
+        "Description": "cron schedule",
+        "Type": "String"
+      }
+  },
+  "Mappings": {},
+  "Conditions": {},
+  "Resources": {
+    "eventRule": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "Description": "Hourly trigger to ping lambda",
+        "Name": { "Ref": "eventName" },
+        "ScheduleExpression": { "Ref": "schedule" },
+        "State": "ENABLED",
+        "Targets": [{
+          "Arn": { "Ref": "lambdaTargetArn" },
+          "Id": { "Ref": "lambdaName" },
+          "Input": {"Fn::Join": ["", ["{\"region\":\"",{"Ref": "targetRegion" },"\"}"]]}
+        }]
+      }
+    }
+  },
+  "Outputs": {}
+}
