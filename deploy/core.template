@@ -168,10 +168,12 @@
                   {
                     "Fn::Join": [
                       "",
-                      {
-                        "Ref": "dynamo"
-                      },
-                      "/index/*"
+                      [
+                        {
+                          "Ref": "dynamo"
+                        },
+                        "/index/*"
+                      ]
                     ]
                   },
                   {
