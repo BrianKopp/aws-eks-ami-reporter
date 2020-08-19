@@ -115,7 +115,7 @@
     "lambdaIamPolicy": {
        "Type": "AWS::IAM::Policy",
        "Properties": {
-         "Roles": [{"Fn::GetAtt": ["lambdaRole", "Arn"]}],
+         "Roles": [{"Ref": "lambdaRole"}],
           "PolicyName" : {
             "Fn::Join": [
               "-",
