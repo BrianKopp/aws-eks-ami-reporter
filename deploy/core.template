@@ -164,40 +164,12 @@
                     "dynamo:PutItem",
                     "dynamo:Query"
                   ],
-                  "Resource": [
-                    {
-                      "Fn::Join": [
-                        "",
-                        [
-                          {
-                            "Fn::GetAtt": ["dynamo", "Arn"]
-                          },
-                          "/index/*"
-                        ]
-                      ]
-                    },
-                    {
-                      "GetAtt": ["dynamo", "Arn"]
-                    }
-                  ]
+                  "Resource": "*"
                 },
                 {
                   "Effect": "Allow",
                   "Action": "sns:Publish",
-                  "Resource": {
-                    "Fn::Join": [
-                      ":",
-                      [
-                        "arn:aws:sns:*",
-                        {
-                          "Ref": "accountId"
-                        },
-                        {
-                          "Ref": "resourceNamePrefix"
-                        }
-                      ]
-                    ]
-                  }
+                  "Resource": "*"
                 }
               ]
             }
