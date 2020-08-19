@@ -138,8 +138,8 @@
               {
                 "Effect": "Allow",
                 "Action": [
-                  "dynamo:PutItem",
-                  "dynamo:Query"
+                  "dynamodb:PutItem",
+                  "dynamodb:Query"
                 ],
                 "Resource": "*"
               },
