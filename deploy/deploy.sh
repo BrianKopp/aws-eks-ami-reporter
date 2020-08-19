@@ -46,6 +46,7 @@ aws cloudformation deploy \
     --stack-name $branch \
     --template-file "deploy/core.template" \
     --capabilities CAPABILITY_NAMED_IAM \
+    --no-fail-on-empty-changeset \
     --parameter-overrides \
         resourceNamePrefix=$prefix \
         dynamoReadCapacity=$capacity \
@@ -88,6 +89,7 @@ do
     aws cloudformation deploy \
         --stack-name $triggerstackname \
         --template-file "deploy/triggers.template" \
+        --no-fail-on-empty-changeset \
         --parameter-overrides \
             eventName=$triggerstackname \
             lambdaTargetArn=$lambdaarn \
@@ -117,6 +119,7 @@ do
         cloudformation deploy \
         --stack-name $snsstackname \
         --template-file "deploy/regionalsns.template" \
+        --no-fail-on-empty-changeset \
         --parameter-overrides \
             topicName="$branch-aws-eks-ami" \
             accountId=$accountid \
