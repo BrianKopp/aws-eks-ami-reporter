@@ -45,6 +45,7 @@ echo "creating main cloudformation stack $branch"
 aws cloudformation deploy \
     --stack-name $branch \
     --template-file "deploy/core.template" \
+    --capabilities CAPABILITY_NAMED_IAM \
     --parameter-overrides \
         resourceNamePrefix=$prefix \
         dynamoReadCapacity=$capacity \
