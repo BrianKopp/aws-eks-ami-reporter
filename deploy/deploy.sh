@@ -31,9 +31,11 @@ then
 fi
 
 alwaysreport="0"
+cronschedule="cron(0 * * * ? *)"
 if [ "$branch" == "dev" ]
 then
   alwaysreport="1"
+  cronschedule="cron(0 */4 * * ? *)"
 fi
 
 prefix="$branch-aws-eks-ami"
@@ -80,6 +82,7 @@ done
 echo "sleeping 5s..."
 sleep 5
 
+if 
 # deploy triggers and sns topics for each region
 for r in "${regionarray[@]}"
 do
