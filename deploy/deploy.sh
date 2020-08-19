@@ -37,8 +37,11 @@ then
 fi
 
 prefix="$branch-aws-eks-ami"
-eventpattern="arn:aws:events:us-east-1:$accountid:rule/$prefix-*"
-
+if [ "$branch" == "master" ]
+then
+    prefix="aws-eks-ami"
+fi
+eventpattern="arn:aws:events:us-east-1:$accountid:rule/$master-*-trigger"
 
 echo "creating main cloudformation stack $branch"
 # aws --profile name \
