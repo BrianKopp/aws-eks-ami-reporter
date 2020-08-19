@@ -36,7 +36,6 @@ then
 fi
 
 prefix="$branch-aws-eks-ami"
-lambdarole="arn:aws:iam::$accountid:role/$prefix-checker"
 eventpattern="arn:aws:events:us-east-1:$accountid:rule/$prefix-*"
 
 
@@ -51,7 +50,6 @@ aws cloudformation deploy \
         dynamoWriteCapacity=$capacity \
         lambdaCodeBucket=$artifactbucket \
         lambdaCodeKey=$s3destinationkey \
-        lambdaRole=$lambdarole \
         eventRulePattern=$eventpattern \
         accountId=$accountid \
         environment=$branch \
