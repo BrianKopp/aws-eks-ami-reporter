@@ -172,7 +172,7 @@
                         "",
                         [
                           {
-                            "GetAtt": ["dynamo", "Arn"]
+                            "Fn::GetAtt": ["dynamo", "Arn"]
                           },
                           "/index/*"
                         ]
