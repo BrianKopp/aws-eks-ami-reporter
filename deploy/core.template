@@ -112,6 +112,46 @@
         ]
       }
     },
+    "lambdaIamPolicy": {
+       "Type": "AWS::IAM::Policy",
+       "Properties": {
+          "PolicyName" : {
+            "Fn::Join": [
+              "-",
+              [
+                {
+                  "Ref": "resourceNamePrefix"
+                },
+                "checker-lambda"
+              ]
+            ]
+          },
+          "Roles" : [{"Ref": "lambdaRole"}],
+          "PolicyDocument" : {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": "ec2:DescribeImages",
+                "Resource": "*"
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "dynamo:PutItem",
+                  "dynamo:Query"
+                ],
+                "Resource": "*"
+              },
+              {
+                "Effect": "Allow",
+                "Action": "sns:Publish",
+                "Resource": "*"
+              }
+            ]
+          }
+       }
+    },
     "lambdaRole": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -146,35 +186,7 @@
         "ManagedPolicyArns": [
           "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
         ],
-        "Path": "/",
-        "Policies": [
-          {
-            "PolicyName": "AllowPermissions",
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Action": "ec2:DescribeImages",
-                  "Resource": "*"
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "dynamo:PutItem",
-                    "dynamo:Query"
-                  ],
-                  "Resource": "*"
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": "sns:Publish",
-                  "Resource": "*"
-                }
-              ]
-            }
-          }
-        ]
+        "Path": "/"
       }
     },
     "lambda": {
