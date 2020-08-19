@@ -178,6 +178,7 @@
             }
           ]
         },
+        "ManagedPolicyArns": ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"],
         "Description": "Scoped permissions for aws eks ami checker lambda",
         "Path": "/"
       }
