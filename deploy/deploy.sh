@@ -10,6 +10,7 @@ regionarray=()
 
 while read -r line;
 do
+    echo "found region $line"
     regionarray+=("$line")
 done < <(echo -e $regions)
 
