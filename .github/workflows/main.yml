@@ -14,6 +14,7 @@ jobs:
 
     # Runs the build script
     - name: Run a bash script
+      shell: bash
       env:
         BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
         ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
