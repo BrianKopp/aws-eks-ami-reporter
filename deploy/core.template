@@ -126,7 +126,6 @@
               ]
             ]
           },
-          "Roles" : [{"Ref": "lambdaRole"}],
           "PolicyDocument" : {
             "Version": "2012-10-17",
             "Statement": [
@@ -172,20 +171,13 @@
             {
               "Effect": "Allow",
               "Principal": {
-                "Service": [
-                  "lambda.amazonaws.com"
-                ]
+                "Service": "lambda.amazonaws.com"
               },
-              "Action": [
-                "sts:AssumeRole"
-              ]
+              "Action": "sts:AssumeRole"
             }
           ]
         },
         "Description": "Scoped permissions for aws eks ami checker lambda",
-        "ManagedPolicyArns": [
-          "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-        ],
         "Path": "/"
       }
     },
