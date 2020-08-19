@@ -17,7 +17,7 @@ echo "found regions"
 printf '%s\n' "${regionarray[@]}"
 
 echo "creating lambda zip"
-rm lambda.zip
+# rm lambda.zip
 zip lambda.zip src/* -j
 s3destinationkey="$branch/$buildid.zip"
 s3destination="s3://$artifactbucket/$s3destinationkey"
