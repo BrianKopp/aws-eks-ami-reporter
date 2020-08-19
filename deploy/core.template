@@ -172,14 +172,14 @@
                         "",
                         [
                           {
-                            "Ref": "dynamo"
+                            "GetAtt": ["dynamo", "Arn"]
                           },
                           "/index/*"
                         ]
                       ]
                     },
                     {
-                      "Ref": "dynamo"
+                      "GetAtt": ["dynamo", "Arn"]
                     }
                   ]
                 },
