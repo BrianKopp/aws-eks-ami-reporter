@@ -154,13 +154,11 @@
               "Version": "2012-10-17",
               "Statement": [
                 {
-                  "Sid": "AllowDescribeImages",
                   "Effect": "Allow",
                   "Action": "ec2:DescribeImages",
                   "Resource": "*"
                 },
                 {
-                  "Sid": "AllowDynamo",
                   "Effect": "Allow",
                   "Action": [
                     "dynamo:PutItem",
@@ -184,7 +182,6 @@
                   ]
                 },
                 {
-                  "Sid": "AllowSNS",
                   "Effect": "Allow",
                   "Action": "sns:Publish",
                   "Resource": {
