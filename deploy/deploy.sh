@@ -40,7 +40,7 @@ prefix="$branch-aws-eks-ami"
 eventpattern="arn:aws:events:us-east-1:$accountid:rule/$prefix-*"
 
 
-echo "creating main cloudformation stack"
+echo "creating main cloudformation stack $branch"
 # aws --profile name \
 aws cloudformation deploy \
     --stack-name $branch \
