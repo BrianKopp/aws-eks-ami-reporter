@@ -2,7 +2,7 @@
 
 buildid=$GITHUB_RUN_ID
 artifactbucket=$BUCKET_NAME
-branch=${GITHUB_REF##8/} # GITHUB_REF formatted like refs/head/branch-name.
+branch=${GITHUB_REF##*/} # GITHUB_REF formatted like refs/head/branch-name.
 accountid=$ACCOUNT_ID
 capacity=3
 regions="us-east-1\nus-east-2"
