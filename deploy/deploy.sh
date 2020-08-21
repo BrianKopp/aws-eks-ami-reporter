@@ -5,14 +5,14 @@ artifactbucket=$BUCKET_NAME
 branch=${GITHUB_REF##*/} # GITHUB_REF formatted like refs/head/branch-name.
 accountid=$ACCOUNT_ID
 capacity=3
-regions="us-east-1\nus-east-2"
+regionsfile="deploy/regions.$branch.txt"
 regionarray=()
 
 while read -r line;
 do
     echo "found region $line"
     regionarray+=("$line")
-done < <(echo -e $regions)
+done < <(cat $regionsfile)
 
 echo "found regions"
 printf '%s\n' "${regionarray[@]}"
@@ -35,7 +35,7 @@ cronschedule="cron(0 * * * ? *)"
 if [ "$branch" == "dev" ]
 then
   alwaysreport="1"
-  cronschedule="cron(0 */4 * * ? *)"
+  cronschedule="cron(0 */24 * * ? *)"
 fi
 
 prefix="$branch-aws-eks-ami"
