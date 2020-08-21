@@ -39,6 +39,7 @@ then
 fi
 
 prefix="$branch-aws-eks-ami"
+
 if [ "$branch" == "master" ]
 then
     prefix="aws-eks-ami"
@@ -88,7 +89,7 @@ do
     echo ""
     echo "creating triggers and topics for region $r"
     triggerstackname="$branch-$r-trigger"
-    lambdaname="$branch-aws-eks-ami-checker"
+    lambdaname="$prefix-checker"
     lambdaarn="arn:aws:lambda:us-east-1:$accountid:function:$lambdaname"
     # aws --profile name \
     aws cloudformation deploy \
@@ -126,7 +127,7 @@ do
         --template-file "deploy/regionalsns.template" \
         --no-fail-on-empty-changeset \
         --parameter-overrides \
-            topicName="$branch-aws-eks-ami" \
+            topicName=$prefix \
             accountId=$accountid \
             environment=$branch
 
