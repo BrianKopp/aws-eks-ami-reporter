@@ -82,7 +82,6 @@ done
 echo "sleeping 5s..."
 sleep 5
 
-if 
 # deploy triggers and sns topics for each region
 for r in "${regionarray[@]}"
 do
