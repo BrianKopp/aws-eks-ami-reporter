@@ -1,5 +1,5 @@
 
-const requiredNameRegex = /^(.*)-\d\.\d+-v\d{8}$/g;
+const requiredNameRegex = /^(.*)-\d\.\d+-v\d{8}$/;
 
 /**
  * @param {import('aws-sdk').EC2} ec2Client
